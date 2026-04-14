@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Battle X - Sitio Oficial</title>
+    <style>
+        :root {
+            --neon-blue: #00ffff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0c;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(180deg, #111, var(--dark-bg));
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 0 10px var(--neon-blue);
+            letter-spacing: 5px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #16161a;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+        }
+
+        h2 {
+            color: var(--neon-blue);
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-download {
+            background-color: var(--neon-blue);
+            color: black;
+        }
+
+        .btn-donate {
+            background-color: var(--neon-pink);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        .game-preview {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #555;
+            border: 1px dashed #444;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SPACE BATTLE X</h1>
+    <p>¡La batalla galáctica definitiva ha llegado!</p>
+</header>
+
+<div class="container">
+    
+    <!-- SECCIÓN DE DESCARGAS -->
+    <section class="card">
+        <h2>📥 Descargas</h2>
+        <div class="game-preview">
+            [ Imagen o Preview del Juego ]
+        </div>
+        <h3>Space Battle X (v1.0)</h3>
+        <p>
+            ¡Pilota tu nave a través de una lluvia de enemigos! 
+            Recoge bonos de velocidad, disparos múltiples y desbloquea naves increíbles en la tienda. 
+            Un juego de acción arcade puro hecho en HTML5.
+        </p>
+        <ul>
+            <li>Efectos de sonido retro</li>
+            <li>Sistema de tienda y skins</li>
+            <li>Power-ups dinámicos</li>
+        </ul>
+        <button class="btn btn-download" onclick="downloadGame()">DESCARGAR JUEGO (.HTML)</button>
+    </section>
+
+    <!-- SECCIÓN DE DONACIONES -->
+    <section class="card">
+        <h2>☕ Apoya el Proyecto</h2>
+        <p>
+            Si te has divertido jugando, considera apoyar el desarrollo de nuevos niveles y naves. 
+            Cada donación ayuda a mantener los servidores y crear más contenido gratuito.
+        </p>
+        <p>Puedes donar a través de las siguientes plataformas:</p>
+        
+        <a href="https://paypal.me" target="_blank" class="btn btn-donate" style="display: block; text-align: center; margin-bottom: 10px;">Donar por PayPal</a>
+        <a href="https://buymeacoffee.com" target="_blank" class="btn btn-donate" style="display: block; text-align: center; background-color: #ffdd00; color: black;">Buy Me a Coffee</a>
+        
+        <p style="font-size: 0.8rem; margin-top: 20px; color: #888;">
+            * Nota: Las donaciones son voluntarias y no reembolsables. ¡Gracias por el apoyo!
+        </p>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2024 Creado por [Tu Nombre/Alias]. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    // Función para descargar el código del juego que proporcionaste
+    function downloadGame() {
+        const gameCode = `
+        <!-- AQUÍ VA TODO TU CÓDIGO DEL JUEGO -->
+        ${document.getElementById('game-source').textContent}
+        `;
+        
+        const blob = new Blob([gameCode], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'SpaceBattleX.html';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+</script>
+
+<!-- Este script oculto contiene el código de tu juego para que la función de descarga funcione -->
+<script type="text/plain" id="game-source">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Battle X - Multi-Bonus</title>
+    <style>
+        body { margin: 0; background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+        canvas { border: 3px solid #0ff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); background: radial-gradient(circle at bottom, #020024, #020b3a, #000); }
+    </style>
+</head>
+<body>
+<canvas id="game" width="420" height="650"></canvas>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+let state = "lobby"; 
+let keys = {}, bullets = [], enemies = [], particles = [], stars = [], bonuses = [];
+let enemyTimer = 0;
+let speedTimer = 0;
+let multiTimer = 0;
+const BONUS_DURATION = 400; 
+let shieldReady = false, shieldActive = false, shieldTimer = 0, enemyKills = 0;
+let save = JSON.parse(localStorage.getItem("spaceSave")) || { score: 0, owned: [true, false, false, false, false] };
+let score = save.score;
+const ships = [
+    { color: "#00ffff", speed: 6, price: 0 },
+    { color: "#ff4444", speed: 6, price: 100 },
+    { color: "#00ff00", speed: 8, price: 250 },
+    { color: "#ff00ff", speed: 7, price: 500 },
+    { color: "#ff69b4", speed: 7, price: 1200 }
+];
+let shipIndex = 0;
+const player = { x: 210, y: 560 };
+for(let i=0; i<100; i++) stars.push({ x: Math.random()*420, y: Math.random()*650, s: Math.random()*3 + 1 });
+canvas.addEventListener("mousedown", e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    if(state === "lobby") {
+        if(mx > 130 && mx < 290 && my > 420 && my < 465) startGame();
+        if(Math.hypot(mx - 370, my - 580) < 25) state = "shop";
+        if(mx > 50 && mx < 80 && my > 280 && my < 330) changeShip(-1);
+        if(mx > 340 && mx < 370 && my > 280 && my < 330) changeShip(1);
+    } else if(state === "shop") {
+        if(mx > 110 && mx < 310 && my > 430 && my < 470) buyShip();
+        if(my > 580) state = "lobby";
+        if(mx > 50 && mx < 80 && my > 280 && my < 330) shipIndex = (shipIndex-1+ships.length)%ships.length;
+        if(mx > 340 && mx < 370 && my > 280 && my < 330) shipIndex = (shipIndex+1)%ships.length;
+    } else if(state === "gameover") state = "lobby";
+});
+document.addEventListener("keydown", e => {
+    keys[e.key] = true;
+    if(state === "game" && e.key === " ") shoot();
+    if(state === "game" && e.key === "Control" && shieldReady) activateShield();
+});
+document.addEventListener("keyup", e => keys[e.key] = false);
+function changeShip(dir) { do { shipIndex = (shipIndex + dir + ships.length) % ships.length; } while (!save.owned[shipIndex]); }
+function saveGame() { save.score = score; localStorage.setItem("spaceSave", JSON.stringify(save)); }
+function startGame() { bullets = []; enemies = []; particles = []; bonuses = []; enemyTimer = 0; speedTimer = 0; multiTimer = 0; shieldActive = false; shieldReady = false; enemyKills = 0; player.x = 210; state = "game"; }
+function buyShip() { let s = ships[shipIndex]; if(!save.owned[shipIndex] && score >= s.price) { score -= s.price; save.owned[shipIndex] = true; saveGame(); } }
+function shoot() {
+    if(multiTimer > 0) {
+        bullets.push({x: player.x - 15, y: player.y}, {x: player.x, y: player.y}, {x: player.x + 15, y: player.y});
+    } else bullets.push({x: player.x, y: player.y});
+}
+function activateShield() { if(ships[shipIndex].color === "#ff69b4") { shieldActive = true; shieldReady = false; shieldTimer = 400; enemyKills = 0; } }
+function explode(x, y, big = false) {
+    for(let i=0; i<(big?40:15); i++) particles.push({ x, y, dx: (Math.random()-0.5)*6, dy: (Math.random()-0.5)*6, life: 30, c: big?"#ffaa00":"#fff" });
+}
+function drawShip(x, y, color, size, dir="up") {
+    ctx.save(); ctx.translate(x, y); if(dir === "down") ctx.rotate(Math.PI);
+    ctx.fillStyle = color; ctx.shadowBlur = 10; ctx.shadowColor = color;
+    ctx.beginPath(); ctx.moveTo(0, -size); ctx.lineTo(size, size); ctx.lineTo(-size, size); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function loop() {
+    ctx.clearRect(0,0,420,650);
+    stars.forEach(s => { s.y += s.s; if(s.y > 650) s.y = 0; ctx.fillStyle = "white"; ctx.fillRect(s.x, s.y, 2, 2); });
+    if(state === "lobby") {
+        ctx.fillStyle = "white"; ctx.font = "bold 35px Arial"; ctx.fillText("SPACE BATTLE X", 65, 120);
+        drawShip(210, 300, ships[shipIndex].color, 35);
+        ctx.fillStyle = "#0ff"; ctx.fillText("<", 55, 310); ctx.fillText(">", 345, 310);
+        ctx.fillStyle = "#0f0"; ctx.fillRect(130, 420, 160, 45);
+        ctx.fillStyle = "black"; ctx.font = "bold 18px Arial"; ctx.fillText("¡JUGAR!", 175, 448);
+        ctx.fillStyle = "orange"; ctx.beginPath(); ctx.arc(370, 580, 25, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "black"; ctx.fillText("🛒", 358, 587);
+        ctx.fillStyle = "yellow"; ctx.font = "20px Arial"; ctx.fillText("⭐ " + score, 20, 40);
+        requestAnimationFrame(loop); return;
+    }
+    if(state === "shop") {
+        ctx.fillStyle = "white"; ctx.font = "bold 28px Arial"; ctx.fillText("TIENDA", 160, 80);
+        drawShip(210, 280, ships[shipIndex].color, 45);
+        let s = ships[shipIndex];
+        if(save.owned[shipIndex]) { ctx.fillStyle = "#0f0"; ctx.fillText("ADQUIRIDA", 150, 420); }
+        else { ctx.fillStyle = "yellow"; ctx.fillText("💰 " + s.price, 180, 415); ctx.fillStyle = score >= s.price ? "#0ff" : "#444"; ctx.fillRect(110, 435, 200, 40); ctx.fillStyle = "white"; ctx.fillText("COMPRAR", 165, 460); }
+        ctx.fillStyle = "#ff4444"; ctx.fillText("VOLVER", 175, 610);
+        requestAnimationFrame(loop); return;
+    }
+    if(state === "gameover") {
+        ctx.fillStyle = "red"; ctx.font = "bold 40px Arial"; ctx.fillText("GAME OVER", 90, 300);
+        ctx.fillStyle = "white"; ctx.font = "20px Arial"; ctx.fillText("CLIC PARA VOLVER", 115, 350);
+        requestAnimationFrame(loop); return;
+    }
+    let currentSpeed = ships[shipIndex].speed + (speedTimer > 0 ? 4 : 0);
+    if(keys["ArrowLeft"] && player.x > 25) player.x -= currentSpeed;
+    if(keys["ArrowRight"] && player.x < 395) player.x += currentSpeed;
+    if(shieldActive) { ctx.strokeStyle = "#0ff"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(player.x, player.y+5, 35, 0, Math.PI*2); ctx.stroke(); shieldTimer--; if(shieldTimer <= 0) shieldActive = false; }
+    drawShip(player.x, player.y, ships[shipIndex].color, 20);
+    if(speedTimer > 0) {
+        ctx.fillStyle = "#0ff";
+        ctx.fillRect(player.x - 30, player.y + 30, (speedTimer/BONUS_DURATION)*60, 5);
+        speedTimer--;
+    }
+    if(multiTimer > 0) {
+        ctx.fillStyle = "#f0f";
+        ctx.fillRect(player.x - 30, player.y + 38, (multiTimer/BONUS_DURATION)*60, 5);
+        multiTimer--;
+    }
+    bullets.forEach((b, i) => { b.y -= 10; ctx.fillStyle = "yellow"; ctx.fillRect(b.x-2, b.y, 4, 12); if(b.y < 0) bullets.splice(i, 1); });
+    enemyTimer++; if(enemyTimer > 45) { enemies.push({x: Math.random()*380+20, y: -40}); enemyTimer = 0; }
+    enemies.forEach((e, i) => {
+        e.y += 3; drawShip(e.x, e.y, "#ff3333", 18, "down");
+        if(Math.hypot(e.x - player.x, e.y - player.y) < 30) { if(shieldActive) { explode(e.x, e.y); enemies.splice(i,1); } else { explode(player.x, player.y, true); state = "gameover"; saveGame(); } }
+        bullets.forEach((b, j) => {
+            if(Math.hypot(e.x - b.x, e.y - b.y) < 20) { explode(e.x, e.y); enemies.splice(i,1); bullets.splice(j,1); score += 10; enemyKills++; if(enemyKills >= 12) shieldReady = true; if(Math.random() < 0.20) bonuses.push({x: e.x, y: e.y, type: Math.random()<0.5?"speed":"multi"}); }
+        });
+        if(e.y > 670) enemies.splice(i,1);
+    });
+    bonuses.forEach((bo, i) => {
+        bo.y += 2; ctx.fillStyle = bo.type === "speed" ? "#0ff" : "#f0f"; 
+        ctx.beginPath(); ctx.arc(bo.x, bo.y, 10, 0, Math.PI*2); ctx.fill();
+        if(Math.hypot(bo.x - player.x, bo.y - player.y) < 25) { if(bo.type === "speed") speedTimer = BONUS_DURATION; else multiTimer = BONUS_DURATION; bonuses.splice(i, 1); }
+        if(bo.y > 650) bonuses.splice(i, 1);
+    });
+    particles.forEach((p, i) => { p.x += p.dx; p.y += p.dy; p.life--; ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, 2, 2); if(p.life <= 0) particles.splice(i, 1); });
+    requestAnimationFrame(loop);
+}
+loop();
+<\/script>
+</body>
+</html>
+</script>
+
+</body>
+</html>
