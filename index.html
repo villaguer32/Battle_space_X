@@ -1,186 +1,207 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Battle X - Oficial</title>
-    <style>
-        :root {
-            --neon-blue: #00ffff;
-            --neon-pink: #ff00ff;
-            --dark-bg: #050505;
-            --card-bg: #121214;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space Battle X - Oficial</title>
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<style>
+:root {
+    --blue: #00ffff;
+    --pink: #ff00ff;
+}
 
-        /* --- NAVEGACIÓN --- */
-        nav {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 2px solid var(--neon-blue);
-            z-index: 1000;
-        }
+/* 🌌 FONDO */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden;
+}
 
-        nav button {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
+/* ESTRELLAS */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
 
-        nav button:hover, nav button.active {
-            background: var(--neon-blue);
-            color: black;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
+/* NAV */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--blue);
+}
 
-        /* --- CONTENEDOR DE SECCIONES --- */
-        .content-area {
-            width: 90%;
-            max-width: 800px;
-            margin: 40px 0;
-        }
+nav button {
+    padding: 10px 20px;
+    border: 1px solid var(--blue);
+    background: transparent;
+    color: var(--blue);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
 
-        .section {
-            display: none; /* Oculto por defecto */
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #333;
-            text-align: center;
-            animation: fadeIn 0.4s ease-out;
-        }
+nav button:hover, nav button.active {
+    background: var(--blue);
+    color: black;
+    box-shadow: 0 0 20px var(--blue);
+}
 
-        .active-section {
-            display: block; /* Solo se muestra la sección activa */
-        }
+/* SECCIONES */
+.section {
+    display: none;
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    animation: fade 0.5s;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.active-section {
+    display: block;
+}
 
-        /* --- ESTILOS DE TEXTO Y BOTONES --- */
-        h1 { color: var(--neon-blue); font-size: 2.5rem; text-shadow: 0 0 10px var(--neon-blue); }
-        h2 { color: var(--neon-pink); font-size: 2rem; margin-top: 0; }
-        p { color: #ccc; font-size: 1.1rem; line-height: 1.6; }
+h1 { color: var(--blue); text-shadow: 0 0 20px var(--blue); }
+h2 { color: var(--pink); }
 
-        .btn-large {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            border: none;
-        }
+/* BOTONES */
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
 
-        .btn-blue { background: var(--neon-blue); color: black; }
-        .btn-pink { background: var(--neon-pink); color: white; }
+.btn-blue { background: var(--blue); color: black; }
+.btn-pink { background: var(--pink); color: white; }
 
-        .btn-large:hover { transform: scale(1.05); filter: brightness(1.2); }
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px white;
+}
 
-        .features-list {
-            text-align: left;
-            display: inline-block;
-            margin: 20px 0;
-        }
-    </style>
+/* ANIMACIONES */
+@keyframes fade {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1;}
+}
+
+.rocket {
+    font-size: 4rem;
+    animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-10px);}
+}
+</style>
 </head>
+
 <body>
 
-    <!-- MENÚ SUPERIOR -->
-    <nav>
-        <button onclick="changeTab('inicio')" id="tab-inicio" class="active">Inicio</button>
-        <button onclick="changeTab('descargas')" id="tab-descargas">Descargas</button>
-        <button onclick="changeTab('donaciones')" id="tab-donaciones">Donaciones</button>
-    </nav>
+<canvas id="stars"></canvas>
 
-    <div class="content-area">
-        
-        <!-- SECCIÓN 1: INICIO -->
-        <div id="inicio" class="section active-section">
-            <h1>SPACE BATTLE X</h1>
-            <p>¡Bienvenido a la base de operaciones galáctica!</p>
-            <p>Sobrevive a oleadas de enemigos, mejora tu nave y domina el espacio exterior en este arcade frenético.</p>
-            <div style="font-size: 5rem; margin: 20px;">🚀</div>
-            <p>Usa los botones de navegación para explorar los apartados.</p>
-        </div>
+<nav>
+<button onclick="tab('inicio')" id="b-inicio" class="active">Inicio</button>
+<button onclick="tab('descargas')" id="b-descargas">Descargas</button>
+<button onclick="tab('donaciones')" id="b-donaciones">Donaciones</button>
+</nav>
 
-        <!-- SECCIÓN 2: DESCARGAS -->
-        <div id="descargas" class="section">
-            <h2>📥 Apartado de Descarga</h2>
-            <p>¡Juega al instante con la versión ultra-ligera!</p>
-            
-            <div class="features-list">
-                <p>✅ <strong>Versión:</strong> 1.0 (Web Edition)</p>
-                <p>✅ <strong>Peso:</strong> Menos de 1 MB</p>
-                <p>✅ <strong>Compatibilidad:</strong> Windows, Mac, Linux y Móvil</p>
-            </div>
+<div id="inicio" class="section active-section">
+<h1>🚀 SPACE BATTLE X</h1>
+<p>Sobrevive, mejora tu nave y domina el espacio.</p>
+<div class="rocket">🚀</div>
+</div>
 
-            <br>
-            <!-- Este enlace descarga el código del juego que ya tienes en GitHub -->
-            <a href="index.html" download="Space_Battle_X_Lite.html" class="btn-large btn-blue" style="text-decoration: none; display: inline-block;">
-                DESCARGAR VERSIÓN LITE (.HTML)
-            </a>
-            
-            <p style="font-size: 0.8rem; color: #888; margin-top: 15px;">
-                * Solo necesitas abrir el archivo descargado en cualquier navegador para jugar.
-            </p>
-        </div>
+<div id="descargas" class="section">
+<h2>📥 Descargar Juego</h2>
+<p>Versión completa lista para jugar.</p>
 
-        <!-- SECCIÓN 3: DONACIONES -->
-        <div id="donaciones" class="section">
-            <h2>☕ Apartado de Donaciones</h2>
-            <p>Si te gusta mi trabajo y quieres apoyar el desarrollo de nuevas actualizaciones, puedes hacerlo aquí.</p>
-            
-            <div style="margin: 30px 0;">
-                <a href="https://paypal.me" target="_blank" class="btn-large btn-pink" style="text-decoration: none; display: inline-block;">Donar vía PayPal</a>
-            </div>
-            
-            <p style="font-size: 0.9rem; color: #666;">* Las donaciones ayudan a mantener el proyecto libre de anuncios y gratuito.</p>
-        </div>
+<button onclick="downloadGame()" class="btn btn-blue">
+DESCARGAR SPACE BATTLE X
+</button>
+</div>
 
-    </div>
+<div id="donaciones" class="section">
+<h2>☕ Apoya el proyecto</h2>
+<p>Ayuda a mejorar el juego sin anuncios.</p>
 
-    <script>
-        // Función para cambiar de apartado
-        function changeTab(id) {
-            // Ocultar todas las secciones
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-            // Quitar clase activa de botones
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+<a href="https://paypal.me" target="_blank">
+<button class="btn btn-pink">DONAR</button>
+</a>
+</div>
 
-            // Mostrar la sección elegida
-            document.getElementById(id).classList.add('active-section');
-            // Activar botón elegido
-            document.getElementById('tab-' + id).classList.add('active');
-        }
-    </script>
+<script>
+function tab(id){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-section'));
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+
+    document.getElementById(id).classList.add('active-section');
+    document.getElementById('b-'+id).classList.add('active');
+}
+
+/* 🌠 FONDO ESTRELLAS */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for(let i=0;i<120;i++){
+    stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        size: Math.random()*2
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "white";
+    stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+        ctx.fill();
+
+        s.y += 0.3;
+        if(s.y > canvas.height) s.y = 0;
+    });
+
+    requestAnimationFrame(draw);
+}
+draw();
+
+/* 📥 DESCARGA DEL JUEGO */
+function downloadGame() {
+    const content = `PEGA_AQUI_TU_JUEGO`;
+
+    const blob = new Blob([content], { type: "text/html" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = "Space_Battle_X.html";
+    link.click();
+}
+</script>
 
 </body>
 </html>
