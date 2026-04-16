@@ -1,221 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Battle X - Oficial</title>
+  <meta charset="UTF-8">
+  <title>Space Battle X</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root {
-    --blue: #00ffff;
-    --pink: #ff00ff;
-}
+  <!-- FUENTE PRO -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-/* 🌌 FONDO */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: black;
-    color: white;
-    overflow-x: hidden;
-}
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ESTRELLAS */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
+    body {
+      margin: 0;
+      background: black;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+    }
 
-/* NAV */
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 15px;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--blue);
-}
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(0,0,0,0.7);
+      z-index: 10;
+    }
 
-nav button {
-    padding: 10px 20px;
-    border: 1px solid var(--blue);
-    background: transparent;
-    color: var(--blue);
-    cursor: pointer;
-    border-radius: 8px;
-    transition: 0.3s;
-}
+    nav button {
+      background: transparent;
+      border: 2px solid cyan;
+      color: cyan;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-nav button:hover, nav button.active {
-    background: var(--blue);
-    color: black;
-    box-shadow: 0 0 20px var(--blue);
-}
+    nav button:hover {
+      background: cyan;
+      color: black;
+    }
 
-/* SECCIONES */
-.section {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
+    section {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    h1 {
+      color: cyan;
+      text-shadow: 0 0 15px cyan;
+    }
 
-    text-align: center;
-}
-}
-}
+    .btn {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
 
-.active-section {
-    display: block;
-}
+    .descargar {
+      background: cyan;
+      color: black;
+    }
 
-h1 { color: var(--blue); text-shadow: 0 0 20px var(--blue); }
-h2 { color: var(--pink); }
+    .donar {
+      background: magenta;
+      color: white;
+    }
 
-/* BOTONES */
-.btn {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 10px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.btn-blue { background: var(--blue); color: black; }
-.btn-pink { background: var(--pink); color: white; }
-
-.btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px white;
-}
-
-/* ANIMACIONES */
-@keyframes fade {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1;}
-}
-
-.rocket {
-    font-size: 4rem;
-    animation: float 2s infinite ease-in-out;
-}
-
-@keyframes float {
-    0%,100% {transform: translateY(0);}
-    50% {transform: translateY(-10px);}
-}
-</style>
+    .btn:hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
+  <!-- MENÚ -->
+  <nav>
+    <button onclick="ir('inicio')">Inicio</button>
+    <button onclick="ir('descargas')">Descargas</button>
+    <button onclick="ir('donaciones')">Donaciones</button>
+  </nav>
 
-<nav>
-<button onclick="tab('inicio')" id="b-inicio" class="active">Inicio</button>
-<button onclick="tab('descargas')" id="b-descargas">Descargas</button>
-<button onclick="tab('donaciones')" id="b-donaciones">Donaciones</button>
-</nav>
+  <!-- INICIO -->
+  <section id="inicio">
+    <h1>🚀 SPACE BATTLE X</h1>
+    <p>Sobrevive, mejora tu nave y domina el espacio.</p>
 
-<div id="inicio" class="section active-section">
-<h1>🚀 SPACE BATTLE X</h1>
-<p>Sobrevive, mejora tu nave y domina el espacio.</p>
-<div class="rocket">🚀</div>
-</div>
+    <button class="btn descargar" onclick="ir('descargas')">DESCARGAR</button>
+    <button class="btn donar" onclick="ir('donaciones')">DONAR</button>
+  </section>
 
-<div id="descargas" class="section">
-<h2>📥 Descargar Juego</h2>
-<p>Versión completa lista para jugar.</p>
+  <!-- DESCARGAS -->
+  <section id="descargas">
+    <h1>📥 DESCARGAS</h1>
+    <p>Descarga el juego aquí 👇</p>
 
-<button onclick="downloadGame()" class="btn btn-blue">
-DESCARGAR SPACE BATTLE X
-</button>
-</div>
+    <!-- BOTÓN REAL DE DESCARGA -->
+    <a href="https://villaguer32.github.io/Battle_space_X/BATTLE_SPACE_X.html" download style="text-decoration:none;">
+      <button class="btn descargar">DESCARGAR JUEGO 🚀</button>
+    </a>
+  </section>
 
-<div id="donaciones" class="section">
-<h2>☕ Apoya el proyecto</h2>
-<p>Ayuda a mejorar el juego sin anuncios.</p>
+  <!-- DONACIONES -->
+  <section id="donaciones">
+    <h1>💖 DONACIONES</h1>
+    <p>Apoya el desarrollo del juego 🚀</p>
+  </section>
 
-<a href="https://paypal.me" target="_blank">
-<button class="btn btn-pink">DONAR</button>
-</a>
-</div>
-
-<script>
-function tab(id){
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-section'));
-    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-
-    document.getElementById(id).classList.add('active-section');
-    document.getElementById('b-'+id).classList.add('active');
-}
-
-/* 🌠 FONDO ESTRELLAS */
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-
-for(let i=0;i<120;i++){
-    stars.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        size: Math.random()*2
-    });
-}
-
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle = "white";
-    stars.forEach(s=>{
-        ctx.beginPath();
-        ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
-        ctx.fill();
-
-        s.y += 0.3;
-        if(s.y > canvas.height) s.y = 0;
-    });
-
-    requestAnimationFrame(draw);
-}
-draw();
-
-/* 📥 DESCARGA DEL JUEGO */
-function downloadGame() {
-    const content = `PEGA_AQUI_TU_JUEGO`;
-
-    const blob = new Blob([content], { type: "text/html" });
-    const link = document.createElement("a");
-
-    link.href = URL.createObjectURL(blob);
-    link.download = "Space_Battle_X.html";
-    link.click();
-}
-</script>
+  <!-- SCRIPT -->
+  <script>
+    function ir(seccion) {
+      document.getElementById(seccion).scrollIntoView();
+    }
+  </script>
 
 </body>
 </html>
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-}
-body {
-    overflow: hidden;
-}
