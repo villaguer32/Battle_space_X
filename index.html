@@ -3,118 +3,448 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Battle X</title>
+  <title>Space Battle X - El Juego Espacial Definitivo</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Audiowide&display=swap" rel="stylesheet">
 
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      background: black;
-      color: white;
+      background: #0a0e27;
+      color: #e0e6ff;
       font-family: 'Orbitron', sans-serif;
       text-align: center;
+      overflow-x: hidden;
+      position: relative;
     }
 
+    /* Fondo animado con estrellas */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 60px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50px 50px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 10px, #eee, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    /* NAV */
     nav {
       position: fixed;
       top: 0;
       width: 100%;
       display: flex;
       justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      background: rgba(0,0,0,0.7);
+      gap: 15px;
+      padding: 15px 20px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid;
+      border-image: linear-gradient(90deg, #00d4ff, #ff00ff, #00ff88) 1;
+      z-index: 100;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     }
 
     nav button {
-      background: transparent;
-      border: 2px solid cyan;
-      color: cyan;
-      padding: 8px 14px;
-      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+      border: 2px solid;
+      border-image: linear-gradient(45deg, #00d4ff, #ff00ff) 1;
+      color: #00ffff;
+      padding: 10px 20px;
+      border-radius: 15px;
       cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
     }
 
+    nav button:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(255, 0, 255, 0.3));
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    nav button:active {
+      transform: translateY(0);
+    }
+
+    /* SECCIONES */
     section {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 80px 40px 40px;
+      position: relative;
+      z-index: 1;
     }
 
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* TEXTOS */
     h1 {
-      color: cyan;
-      text-shadow: 0 0 15px cyan;
+      color: #00ffff;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 40px #ff00ff,
+        0 0 80px #ff00ff;
+      margin-bottom: 20px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      animation: glow-pulse 3s ease-in-out infinite;
+      text-transform: uppercase;
     }
 
+    @keyframes glow-pulse {
+      0%, 100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #ff00ff, 0 0 80px #ff00ff; }
+      50% { text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #ff00ff, 0 0 100px #ff00ff, 0 0 120px #00ff88; }
+    }
+
+    .subtitle {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      color: #ff00ff;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px #ff00ff;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .description {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: #b0b8ff;
+      max-width: 800px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    /* BOTONES */
     .btn {
-      margin-top: 20px;
-      padding: 12px 20px;
-      border-radius: 20px;
-      border: none;
+      margin: 15px 10px;
+      padding: 15px 35px;
+      border-radius: 25px;
+      border: 2px solid;
+      border-image: linear-gradient(135deg, #00d4ff, #ff00ff) 1;
       cursor: pointer;
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
-      transition: 0.3s;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
 
-    .descargar { background: cyan; color: black; }
-    .donar { background: magenta; color: white; }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #00d4ff, #ff00ff, #00ff88);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
 
-    .btn:hover { transform: scale(1.1); }
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .descargar {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
+      color: #00ffff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+
+    .descargar:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), rgba(0, 255, 136, 0.4));
+      color: #00ffff;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 136, 0.6), inset 0 0 30px rgba(0, 255, 255, 0.2);
+      transform: scale(1.1) translateY(-3px);
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .donar {
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 100, 0.2));
+      color: #ff00ff;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.5), inset 0 0 20px rgba(255, 0, 100, 0.1);
+    }
+
+    .donar:hover {
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(255, 0, 100, 0.4));
+      color: #ff00ff;
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.8), 0 0 60px rgba(255, 0, 100, 0.6), inset 0 0 30px rgba(255, 0, 255, 0.2);
+      transform: scale(1.1) translateY(-3px);
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* SECCIÓN INICIO */
+    #inicio {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
+    }
+
+    #inicio h1 {
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+
+    /* SECCIÓN DESCARGAS */
+    #descargas {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+    }
+
+    #descargas h1 {
+      color: #00ff88;
+      text-shadow: 
+        0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 40px #00d4ff;
+    }
+
+    /* SECCIÓN DONACIONES */
+    #donaciones {
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.05) 0%, rgba(255, 0, 100, 0.05) 100%);
+    }
+
+    #donaciones h1 {
+      color: #ff00ff;
+      text-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff,
+        0 0 40px #ff0088;
+    }
+
+    /* ELEMENTOS DECORATIVOS */
+    .neon-box {
+      border: 2px solid;
+      border-image: linear-gradient(135deg, #00d4ff, #ff00ff, #00ff88) 1;
+      padding: 30px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 255, 0.05));
+      box-shadow: 
+        0 0 20px rgba(0, 212, 255, 0.3),
+        inset 0 0 20px rgba(0, 212, 255, 0.1);
+      margin: 20px auto;
+      max-width: 700px;
+    }
+
+    .feature-list {
+      text-align: left;
+      display: inline-block;
+      margin: 20px 0;
+    }
+
+    .feature-item {
+      padding: 12px 20px;
+      margin: 8px 0;
+      background: rgba(0, 212, 255, 0.1);
+      border-left: 3px solid #00ffff;
+      border-radius: 5px;
+      color: #b0b8ff;
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      background: rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+      transform: translateX(10px);
+      border-left-color: #00ff88;
+    }
+
+    .feature-item strong {
+      color: #00ffff;
+    }
+
+    /* EFECTO PARALLAX */
+    .parallax-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav {
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      nav button {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      section {
+        padding: 100px 20px 40px;
+      }
+
+      .neon-box {
+        padding: 20px;
+      }
+    }
+
+    /* ANIMACIÓN ENTRADA */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section > * {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    section h1 { animation-delay: 0.1s; }
+    section .subtitle { animation-delay: 0.2s; }
+    section .description { animation-delay: 0.3s; }
+    section .btn { animation-delay: 0.4s; }
+    section .neon-box { animation-delay: 0.5s; }
+
   </style>
 </head>
 
 <body>
 
-  <!-- MENÚ -->
+  <!-- MENÚ DE NAVEGACIÓN -->
   <nav>
-    <button onclick="ir('inicio')">Inicio</button>
-    <button onclick="ir('descargas')">Descargar</button>
-    <button onclick="ir('donaciones')">Donar</button>
+    <button onclick="ir('inicio')">🚀 Inicio</button>
+    <button onclick="ir('descargas')">📥 Descargar</button>
+    <button onclick="ir('donaciones')">💖 Donar</button>
   </nav>
 
-  <!-- INICIO -->
+  <!-- SECCIÓN INICIO -->
   <section id="inicio">
-    <h1>🚀 SPACE BATTLE X</h1>
-    <p>Juego espacial épico 😎</p>
+    <h1>⚡ SPACE BATTLE X ⚡</h1>
+    <p class="subtitle">La Experiencia Espacial Definitiva</p>
+    <p class="description">
+      Sumérgete en un universo de acción sin límites donde tú eres el piloto. 
+      Controla tu nave espacial avanzada, esquiva proyectiles enemigos devastadores y 
+      derrota oleadas infinitas de adversarios cósmicos. Con gráficos envolventes, 
+      mecánicas de juego profundas y una banda sonora épica, Space Battle X te llevará 
+      más allá de los confines del espacio conocido. ¿Estás listo para la batalla?
+    </p>
 
     <button class="btn descargar" onclick="ir('descargas')">
-      📥 DESCARGAR
+      ⬇️ DESCARGAR AHORA
     </button>
   </section>
 
-  <!-- DESCARGA -->
+  <!-- SECCIÓN DESCARGAS -->
   <section id="descargas">
-    <h1>📥 DESCARGA</h1>
-    <p>Descarga el juego aquí 👇</p>
+    <h1>📥 DESCARGA EL JUEGO</h1>
+    <p class="subtitle">Comienza tu Aventura Cósmica Hoy</p>
+    
+    <div class="neon-box">
+      <p class="description">
+        Space Battle X está listo para conquistar tu computadora. Descarga la versión más reciente 
+        completamente optimizada con todas las características, mejoras de rendimiento y contenido exclusivo. 
+        Compatible con Windows, Linux y macOS. Sin requerimientos de instalación complicada, 
+        simplemente extrae y ¡juega!
+      </p>
 
-    <!-- 🔥 DESCARGA REAL -->
+      <div class="feature-list">
+        <div class="feature-item">✨ <strong>Versión:</strong> 2.5 - Edición Completa</div>
+        <div class="feature-item">📦 <strong>Tamaño:</strong> ~250 MB</div>
+        <div class="feature-item">🎮 <strong>Plataformas:</strong> Windows, Linux, macOS</div>
+        <div class="feature-item">⚙️ <strong>Requisitos:</strong> Mínimos - Funciona en cualquier PC</div>
+        <div class="feature-item">🔄 <strong>Actualizaciones:</strong> Automáticas y Gratuitas</div>
+      </div>
+    </div>
+
     <a href="JUEGO.zip" download="JUEGO.zip" class="btn descargar">
       🚀 DESCARGAR JUEGO ZIP
     </a>
   </section>
 
-  <!-- DONACIONES -->
+  <!-- SECCIÓN DONACIONES -->
   <section id="donaciones">
-    <h1>💖 DONACIONES</h1>
-    <p>Apoya el proyecto 🚀</p>
+    <h1>💖 APOYA EL PROYECTO</h1>
+    <p class="subtitle">Haz Posible Más Contenido</p>
+    
+    <div class="neon-box">
+      <p class="description">
+        Tu apoyo es fundamental para el desarrollo continuo de Space Battle X. Cada donación nos ayuda a 
+        crear nuevos niveles desafiantes, personajes épicos, armas revolucionarias y experiencias de juego 
+        jamás vistas. Independientemente de la cantidad, tu contribución marca la diferencia en la evolución 
+        de este proyecto apasionante. Únete a la comunidad de patrocinadores y sé parte de la historia.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item">🎁 <strong>Donación Pequeña:</strong> $5 - Acceso exclusivo a contenido beta</div>
+        <div class="feature-item">🌟 <strong>Donación Mediana:</strong> $15 - Nombre en créditos + skins especiales</div>
+        <div class="feature-item">👑 <strong>Donación Grande:</strong> $50 - Acceso VIP + diseño personalizado</div>
+        <div class="feature-item">🚀 <strong>Patrón:</strong> $100+ - Influencia en desarrollo futuro</div>
+      </div>
+    </div>
 
     <a href="https://www.paypal.com/" target="_blank" class="btn donar">
-      💸 DONAR
+      💸 DONAR AHORA - PAYPAL
     </a>
   </section>
 
   <script>
     function ir(id) {
-      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+      const elemento = document.getElementById(id);
+      elemento.scrollIntoView({ behavior: "smooth" });
     }
+
+    // Efecto de hover adicional en los botones
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.filter = 'brightness(1.2)';
+      });
+      btn.addEventListener('mouseleave', function() {
+        this.style.filter = 'brightness(1)';
+      });
+    });
   </script>
 
 </body>
