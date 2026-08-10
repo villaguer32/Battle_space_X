@@ -90,6 +90,37 @@
       transform: translateY(0);
     }
 
+    /* Botón GitHub especial */
+    .github-btn {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(100, 100, 100, 0.1)) !important;
+      border: 2px solid #ffffff !important;
+      color: #ffffff !important;
+      padding: 10px 20px !important;
+      border-radius: 15px !important;
+      cursor: pointer !important;
+      font-family: 'Orbitron', sans-serif !important;
+      font-weight: bold !important;
+      font-size: 14px !important;
+      transition: all 0.3s ease !important;
+      text-transform: uppercase !important;
+      letter-spacing: 2px !important;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+
+    .github-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(150, 150, 150, 0.3)) !important;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 40px rgba(200, 200, 200, 0.6) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .github-btn:active {
+      transform: translateY(0) !important;
+    }
+
     /* SECCIONES */
     section {
       min-height: 100vh;
@@ -317,6 +348,11 @@
         font-size: 12px;
       }
 
+      .github-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+      }
+
       section {
         padding: 100px 20px 40px;
       }
@@ -358,6 +394,9 @@
     <button onclick="ir('inicio')">  Inicio</button>
     <button onclick="ir('descargas')">  Descargar</button>
     <button onclick="ir('donaciones')"> Donar</button>
+    <a href="https://github.com/villaguer32/Battle_space_X" target="_blank" class="github-btn">
+      🐙 GitHub
+    </a>
   </nav>
 
   <!-- SECCIÓN INICIO -->
