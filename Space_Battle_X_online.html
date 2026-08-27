@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Space Battle X - Multi-Bonus</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; }
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0a1f 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100dvh; 
+            min-height: 100vh;
+            overflow: hidden; 
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+        #gameWrap {
+            position: relative;
+            width: min(420px, 100vw);
+            height: min(650px, 100dvh);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas { 
+            display: block;
+            width: min(420px, 100vw);
+            height: min(650px, 100dvh);
+            max-width: 100vw;
+            max-height: 100dvh;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 30px rgba(0, 255, 255, 0.1);
+            background: radial-gradient(circle at 30% 20%, #1a0a3e, #0a0a1f, #000);
+        }
+
+        #nameScreen {
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(3, 3, 12, 0.98);
+            pointer-events: auto;
+        }
+
+        .nameBox {
+            width: min(360px, 88vw);
+            padding: 26px 20px;
+            text-align: center;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0,255,255,.35);
+            background: #08081a;
+        }
+
+        .nameTitle {
+            color: #00ffff;
+            font: bold 28px Arial, sans-serif;
+            margin-bottom: 16px;
+        }
+
+        .nameSubtitle {
+            color: #fff;
+            font: bold 14px Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+
+        #playerNameInput {
+            display: block;
+            width: 100%;
+            height: 48px;
+            padding: 8px 12px;
+            border: 2px solid #00ffff;
+            background: #02020c;
+            color: white;
+            outline: none;
+            text-align: center;
+            font: bold 18px Arial, sans-serif;
+            margin-bottom: 12px;
+        }
+
+        #nameConfirmBtn {
+            display: block;
+            width: 100%;
+            height: 48px;
+            border: none;
+            background: linear-gradient(90deg, #00ff88, #00ffff);
+            color: #000;
+            font: bold 17px Arial, sans-serif;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        #nameError {
+            height: 20px;
+            margin-top: 8px;
+            color: #ff4444;
+            font: bold 13px Arial, sans-serif;
+        }
+
+
+        #onlineScreen {
+            position:absolute; inset:0; z-index:90; display:none; align-items:center; justify-content:center;
+            background:rgba(3,3,12,.97); pointer-events:auto;
+        }
+        .onlineBox { width:min(370px,88vw); padding:24px 20px; text-align:center; border:2px solid #00ffff;
+            box-shadow:0 0 30px rgba(0,255,255,.35); background:#08081a; }
+        .onlineTitle { color:#00ffff; font:bold 27px Arial,sans-serif; margin-bottom:10px; }
+        .onlineHint { color:#ddd; font:14px Arial,sans-serif; line-height:1.4; margin-bottom:14px; }
+        #serverUrlInput,#roomInput { display:block; width:100%; height:46px; box-sizing:border-box; margin:8px 0;
+            padding:8px 12px; border:2px solid #00ffff; background:#02020c; color:#fff; outline:none; text-align:center; font:bold 16px Arial,sans-serif; }
+        .onlineRow { display:flex; gap:8px; margin-top:10px; }
+        .onlineRow button { flex:1; height:46px; border:0; font:bold 15px Arial,sans-serif; cursor:pointer; touch-action:manipulation; }
+        #onlineConnectBtn { background:linear-gradient(90deg,#00ff88,#00ffff); color:#000; }
+        #onlineBackBtn { background:#25253a; color:#fff; border:1px solid #777 !important; }
+        #onlineStatus { min-height:20px; margin-top:10px; color:#00ff88; font:bold 13px Arial,sans-serif; }
+
+        #mobileControls {
+            display: none;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .moveControls, .actionControls {
+            position: absolute;
+            bottom: max(18px, env(safe-area-inset-bottom));
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
+        }
+
+        .moveControls { left: 14px; }
+        .actionControls { right: 14px; }
+
+        .controlBtn {
+            width: 58px;
+            height: 58px;
+            border: 2px solid #00ffff;
+            border-radius: 50%;
+            background: rgba(0, 20, 35, 0.72);
+            color: #00ffff;
+            box-shadow: 0 0 14px rgba(0, 255, 255, 0.35);
+            font: bold 24px Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
+
+        .fireBtn {
+            color: #ffff00;
+            border-color: #ffff00;
+            box-shadow: 0 0 14px rgba(255, 255, 0, 0.35);
+        }
+
+        .shieldBtn {
+            color: #ff00ff;
+            border-color: #ff00ff;
+            box-shadow: 0 0 14px rgba(255, 0, 255, 0.35);
+            display: none;
+        }
+
+        .controlBtn:active {
+            transform: scale(0.92);
+            background: rgba(0, 255, 255, 0.25);
+        }
+
+        @media (pointer: coarse), (max-width: 700px) {
+            #mobileControls { display: block; }
+        }
+
+        @media (orientation: landscape) and (max-height: 700px) {
+            #gameWrap { height: 100dvh; }
+            .controlBtn { width: 52px; height: 52px; }
+            .moveControls, .actionControls { bottom: 10px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="gameWrap">
+    <div id="nameScreen">
+        <div class="nameBox">
+            <div class="nameTitle">SPACE BATTLE X</div>
+            <div class="nameSubtitle">ELIGE TU NOMBRE DE JUGADOR</div>
+            <input id="playerNameInput" type="text" maxlength="16"
+                   autocomplete="off" autocapitalize="words"
+                   placeholder="Tu nombre...">
+            <button id="nameConfirmBtn" type="button">CONTINUAR</button>
+            <div id="nameError"></div>
+        </div>
+    </div>
+    <div id="onlineScreen">
+  <div class="onlineBox">
+    <div class="onlineTitle">🌐 MODO ONLINE</div>
+    <div class="onlineHint">Crea o entra en una sala para jugar con otros jugadores.</div>
+    <input id="serverUrlInput" placeholder="Servidor WebSocket (opcional)" autocomplete="off">
+    <input id="roomInput" maxlength="12" placeholder="Código de sala" autocomplete="off">
+    <div class="onlineRow">
+      <button id="onlineConnectBtn">CONECTAR</button>
+      <button id="onlineBackBtn">VOLVER</button>
+    </div>
+    <div id="onlineStatus">Desconectado</div>
+  </div>
+</div>
+<canvas id="game" width="420" height="650"></canvas>
+
+    <div id="mobileControls" aria-hidden="true">
+        <div class="moveControls">
+            <button id="leftBtn" class="controlBtn">◀</button>
+            <button id="rightBtn" class="controlBtn">▶</button>
+        </div>
+        <div class="actionControls">
+            <button id="shieldBtn" class="controlBtn shieldBtn">◆</button>
+            <button id="fireBtn" class="controlBtn fireBtn">●</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const nameScreen = document.getElementById("nameScreen");
+const playerNameInput = document.getElementById("playerNameInput");
+const nameConfirmBtn = document.getElementById("nameConfirmBtn");
+const nameError = document.getElementById("nameError");
+
+let playerName = readStorage("spacePlayerName") || "";
+let state = "name";
+
+function confirmPlayerName() {
+    const name = playerNameInput.value.trim();
+
+    if (name.length < 2) {
+        nameError.textContent = "Escribe al menos 2 caracteres.";
+        playerNameInput.focus();
+        return;
+    }
+
+    playerName = name.substring(0, 16);
+    writeStorage("spacePlayerName", playerName);
+
+    nameScreen.style.display = "none";
+    state = "lobby";
+}
+
+nameConfirmBtn.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    confirmPlayerName();
+});
+
+playerNameInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        confirmPlayerName();
+    }
+});
+
+if (playerName) {
+    playerNameInput.value = playerName;
+    nameScreen.style.display = "none";
+    state = "lobby";
+}
+
+
+const onlineScreen = document.getElementById("onlineScreen");
+const serverUrlInput = document.getElementById("serverUrlInput");
+const roomInput = document.getElementById("roomInput");
+const onlineConnectBtn = document.getElementById("onlineConnectBtn");
+const onlineBackBtn = document.getElementById("onlineBackBtn");
+const onlineStatus = document.getElementById("onlineStatus");
+
+function defaultWsUrl() {
+    if (location.protocol === "http:" || location.protocol === "https:") {
+        return (location.protocol === "https:" ? "wss://" : "ws://") + location.host;
+    }
+    return "wss://battle-space-x.onrender.com";
+}
+serverUrlInput.value = defaultWsUrl();
+
+function showOnline() {
+    onlineScreen.style.display = "flex";
+    state = "onlineLobby";
+    onlineStatus.textContent = "Desconectado";
+    onlineStatus.style.color = "#ffaa00";
+}
+
+function closeOnline() {
+    disconnectOnline();
+    onlineScreen.style.display = "none";
+    state = "lobby";
+}
+
+function connectOnline() {
+    const url = serverUrlInput.value.trim() || defaultWsUrl();
+    const room = (roomInput.value.trim() || "PUBLIC").toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0,12);
+    if (!room) { onlineStatus.textContent = "Escribe un código de sala."; return; }
+    if (onlineSocket) onlineSocket.close();
+    onlineStatus.textContent = "Conectando...";
+    try { onlineSocket = new WebSocket(url); } catch(e) { onlineStatus.textContent = "URL no válida."; return; }
+    onlineSocket.addEventListener("open", () => {
+        onlineConnected = true; onlineRoom = room;
+        onlineSocket.send(JSON.stringify({type:"join", room, name:playerName, ship:shipIndex, x:player.x, y:player.y}));
+        onlineStatus.textContent = "🟢 Conectado · Sala " + room + " — entrando...";
+        onlineStatus.style.color = "#00ff88";
+        setTimeout(startOnlineGame, 250);
+    });
+    onlineSocket.addEventListener("message", e => {
+        try {
+            const msg = JSON.parse(e.data);
+            if (msg.type === "players") onlinePlayers = msg.players || {};
+        } catch(_) {}
+    });
+    onlineSocket.addEventListener("close", () => {
+        onlineConnected = false; onlinePlayers = {};
+        if (state === "onlineGame") state = "lobby";
+        onlineStatus.textContent = "🔴 Desconectado";
+        onlineStatus.style.color = "#ff5555";
+    });
+    onlineSocket.addEventListener("error", () => {
+        onlineStatus.textContent = "No se pudo conectar al servidor.";
+        onlineStatus.style.color = "#ff5555";
+    });
+}
+
+function disconnectOnline() {
+    if (onlineSocket) { try { onlineSocket.close(); } catch(_) {} }
+    onlineSocket = null; onlineConnected = false; onlinePlayers = {};
+}
+
+onlineConnectBtn.addEventListener("pointerdown", e => { e.preventDefault(); connectOnline(); });
+onlineBackBtn.addEventListener("pointerdown", e => { e.preventDefault(); closeOnline(); });
+
+function startOnlineGame() {
+    if (!onlineConnected) return;
+    bullets = []; enemies = []; particles = []; bonuses = [];
+    enemyTimer = 0; speedTimer = 0; multiTimer = 0; shieldActive = false; shieldReady = false; enemyKills = 0;
+    player.x = 210; state = "onlineGame";
+}
+
+function sendOnlineState() {
+    const now = performance.now();
+    if (!onlineConnected || !onlineSocket || onlineSocket.readyState !== WebSocket.OPEN || now-onlineLastSend < 50) return;
+    onlineLastSend = now;
+    onlineSocket.send(JSON.stringify({type:"update", x:player.x, y:player.y, ship:shipIndex, name:playerName, score:score}));
+}
+
+function drawOnlinePlayers() {
+    for (const id in onlinePlayers) {
+        const p = onlinePlayers[id];
+        if (!p || p.self) continue;
+        ctx.save();
+        ctx.shadowBlur = 18; ctx.shadowColor = ships[p.ship]?.glow || "#00ffff";
+        drawShip(Number(p.x)||210, Number(p.y)||560, ships[p.ship]?.color || "#00ffff", 30);
+        ctx.shadowBlur = 0;
+        ctx.textAlign = "center"; ctx.font = "bold 12px Arial"; ctx.fillStyle = "#fff";
+        ctx.fillText((p.name || "Jugador").slice(0,16), Number(p.x)||210, (Number(p.y)||560)-34);
+        ctx.restore();
+    }
+}
+
+
+let keys = {}, bullets = [], enemies = [], particles = [], stars = [], bonuses = [];
+let enemyTimer = 0;
+
+// ⚡ STATUS INDEPENDIENTES
+let speedTimer = 0;
+let multiTimer = 0;
+const BONUS_DURATION = 400; 
+
+// 🛡️ ESCUDO
+let shieldReady = false, shieldActive = false, shieldTimer = 0, enemyKills = 0;
+
+// 💾 DATOS
+
+function readStorage(key) {
+    try { return localStorage.getItem(key); }
+    catch (e) { return null; }
+}
+
+function writeStorage(key, value) {
+    try { localStorage.setItem(key, value); }
+    catch (e) {}
+}
+
+let defaultSave = { score: 0, owned: [true, false, false, false, false] };
+let save;
+try {
+    save = JSON.parse(readStorage("spaceSave")) || defaultSave;
+    if (!Array.isArray(save.owned) || save.owned.length !== 5) {
+        save.owned = defaultSave.owned.slice();
+    }
+    if (!Number.isFinite(save.score)) save.score = 0;
+} catch (e) {
+    save = { score: 0, owned: [true, false, false, false, false] };
+}
+
+let score = save.score;
+
+const ships = [
+    { color: "#00ffff", speed: 6, price: 0, glow: "#00ffff" },
+    { color: "#ff0066", speed: 6, price: 100, glow: "#ff00ff" },
+    { color: "#00ff88", speed: 8, price: 250, glow: "#00ff88" },
+    { color: "#ff6b00", speed: 7, price: 500, glow: "#ffaa00" },
+    { color: "#ff00ff", speed: 7, price: 1200, glow: "#ff00ff" }
+];
+
+let shipIndex = 0;
+const player = { x: 210, y: 560 };
+
+// 🌐 ONLINE
+let onlineSocket = null;
+let onlineRoom = "";
+let onlinePlayers = {};
+let onlineConnected = false;
+let onlineLastSend = 0;
+
+for(let i=0; i<150; i++) stars.push({ x: Math.random()*420, y: Math.random()*650, s: Math.random()*2.5 + 0.5, br: Math.random()*255 });
+
+// --- CLICS ---
+canvas.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    if(state === "lobby") {
+        if(mx > 100 && mx < 320 && my > 400 && my < 460) startGame();
+        if(mx > 100 && mx < 320 && my > 465 && my < 530) showOnline();
+        if(Math.hypot(mx - 370, my - 580) < 30) state = "shop";
+        if(mx > 45 && mx < 85 && my > 275 && my < 335) changeShip(-1);
+        if(mx > 335 && mx < 375 && my > 275 && my < 335) changeShip(1);
+    } else if(state === "shop") {
+        if(mx > 80 && mx < 340 && my > 430 && my < 480) buyShip();
+        if(my > 580) state = "lobby";
+        if(mx > 45 && mx < 85 && my > 275 && my < 335) shipIndex = (shipIndex-1+ships.length)%ships.length;
+        if(mx > 335 && mx < 375 && my > 275 && my < 335) shipIndex = (shipIndex+1)%ships.length;
+    } else if(state === "gameover") state = "lobby";
+});
+
+document.addEventListener("keydown", e => {
+    keys[e.key] = true;
+    if(state === "game" && e.key === " ") shoot();
+    if(state === "game" && e.key === "Control" && shieldReady) activateShield();
+});
+document.addEventListener("keyup", e => keys[e.key] = false);
+// --- CONTROLES TÁCTILES ---
+const mobileControls = document.getElementById("mobileControls");
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+const fireBtn = document.getElementById("fireBtn");
+const shieldBtn = document.getElementById("shieldBtn");
+
+function setMove(key, active) {
+    keys[key] = active;
+}
+
+function touchHold(button, key) {
+    const start = e => {
+        e.preventDefault();
+        button.setPointerCapture?.(e.pointerId);
+        setMove(key, true);
+    };
+    const end = e => {
+        e.preventDefault();
+        setMove(key, false);
+    };
+    button.addEventListener("pointerdown", start);
+    button.addEventListener("pointerup", end);
+    button.addEventListener("pointercancel", end);
+    button.addEventListener("pointerleave", end);
+}
+
+touchHold(leftBtn, "ArrowLeft");
+touchHold(rightBtn, "ArrowRight");
+
+fireBtn.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    if (state === "game" || state === "onlineGame") shoot();
+});
+
+shieldBtn.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    if ((state === "game" || state === "onlineGame") && shieldReady) activateShield();
+});
+
+function updateMobileControls() {
+    const touchDevice = window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 700;
+    if (!touchDevice) return;
+
+    mobileControls.style.display = (state === "game" || state === "onlineGame") ? "block" : "none";
+    shieldBtn.style.display =
+        (state === "game" || state === "onlineGame") && ships[shipIndex].color === "#ff00ff" ? "block" : "none";
+}
+
+window.addEventListener("resize", updateMobileControls);
+
+
+function changeShip(dir) { do { shipIndex = (shipIndex + dir + ships.length) % ships.length; } while (!save.owned[shipIndex]); }
+function saveGame() { save.score = score; writeStorage("spaceSave", JSON.stringify(save)); }
+function startGame() { bullets = []; enemies = []; particles = []; bonuses = []; enemyTimer = 0; speedTimer = 0; multiTimer = 0; shieldActive = false; shieldReady = false; enemyKills = 0; player.x = 210; state = "game"; }
+function buyShip() { let s = ships[shipIndex]; if(!save.owned[shipIndex] && score >= s.price) { score -= s.price; save.owned[shipIndex] = true; saveGame(); } }
+
+function shoot() {
+    if(multiTimer > 0) {
+        bullets.push({x: player.x - 15, y: player.y}, {x: player.x, y: player.y}, {x: player.x + 15, y: player.y});
+        particles.push({ x: player.x - 15, y: player.y, dx: 0, dy: 5, life: 15, c: "#00ffff" });
+        particles.push({ x: player.x + 15, y: player.y, dx: 0, dy: 5, life: 15, c: "#00ffff" });
+    } else {
+        bullets.push({x: player.x, y: player.y});
+        particles.push({ x: player.x, y: player.y, dx: 0, dy: 5, life: 12, c: "#00ff88" });
+    }
+}
+
+function activateShield() { if(ships[shipIndex].color === "#ff00ff") { shieldActive = true; shieldReady = false; shieldTimer = 400; enemyKills = 0; } }
+
+function explode(x, y, big = false) {
+    let colors = big ? ["#ffaa00", "#ff6600", "#ff0000"] : ["#00ffff", "#00ff88", "#00aaff"];
+    for(let i=0; i<(big?50:20); i++) {
+        particles.push({ 
+            x, y, 
+            dx: (Math.random()-0.5)*(big?8:5), 
+            dy: (Math.random()-0.5)*(big?8:5), 
+            life: big ? 40 : 30, 
+            c: colors[Math.floor(Math.random()*colors.length)]
+        });
+    }
+}
+
+function drawGradientText(text, x, y, size, color1, color2) {
+    let gradient = ctx.createLinearGradient(x - text.length * size/2, y - size/2, x + text.length * size/2, y + size/2);
+    gradient.addColorStop(0, color1);
+    gradient.addColorStop(1, color2);
+    ctx.fillStyle = gradient;
+    ctx.fillText(text, x, y);
+}
+
+function drawShip(x, y, color, size, dir="up") {
+    ctx.save(); 
+    ctx.translate(x, y); 
+    if(dir === "down") ctx.rotate(Math.PI);
+    
+    // Brillo de nave
+    ctx.fillStyle = color;
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = color;
+    
+    // Triángulo principal
+    ctx.beginPath(); 
+    ctx.moveTo(0, -size); 
+    ctx.lineTo(size, size); 
+    ctx.lineTo(-size, size); 
+    ctx.closePath(); 
+    ctx.fill();
+    
+    // Detalles de luz
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.beginPath();
+    ctx.moveTo(0, -size*0.8);
+    ctx.lineTo(size*0.5, -size*0.2);
+    ctx.lineTo(-size*0.5, -size*0.2);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.restore();
+}
+
+function drawButton(x, y, w, h, text, color1, color2, textColor) {
+    let gradient = ctx.createLinearGradient(x, y, x+w, y+h);
+    gradient.addColorStop(0, color1);
+    gradient.addColorStop(1, color2);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, w, h);
+    
+    ctx.strokeStyle = color1;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
+    
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 18px Orbitron";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x + w/2, y + h/2);
+    ctx.textAlign = "left";
+}
+
+function loop() {
+    updateMobileControls();
+    ctx.clearRect(0, 0, 420, 650);
+
+    if (state === "name") {
+        requestAnimationFrame(loop);
+        return;
+    }
+    
+    // Fondo dinámico
+    let bgGradient = ctx.createLinearGradient(0, 0, 0, 650);
+    bgGradient.addColorStop(0, "rgba(10, 10, 20, 0.3)");
+    bgGradient.addColorStop(0.5, "rgba(15, 10, 30, 0.2)");
+    bgGradient.addColorStop(1, "rgba(5, 5, 15, 0.4)");
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, 420, 650);
+    
+    // Estrellas mejoradas
+    stars.forEach(s => { 
+        s.y += s.s; 
+        if(s.y > 650) s.y = 0; 
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + Math.sin(s.br)*0.3})`;
+        ctx.fillRect(s.x, s.y, 1.5, 1.5);
+    });
+
+    if(state === "lobby") {
+        // Fondo especial lobby
+        let lobbyGradient = ctx.createLinearGradient(0, 0, 420, 650);
+        lobbyGradient.addColorStop(0, "rgba(0, 255, 255, 0.05)");
+        lobbyGradient.addColorStop(0.5, "rgba(255, 0, 255, 0.05)");
+        lobbyGradient.addColorStop(1, "rgba(0, 255, 136, 0.05)");
+        ctx.fillStyle = lobbyGradient;
+        ctx.fillRect(0, 0, 420, 650);
+        
+        // Título
+        ctx.font = "bold 48px Orbitron";
+        ctx.textAlign = "center";
+        drawGradientText("SPACE", 210, 80, 48, "#00ffff", "#00ff88");
+        drawGradientText("BATTLE X", 210, 130, 48, "#00ff88", "#ff00ff");
+        ctx.textAlign = "left";
+        
+        // Nave seleccionada
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = ships[shipIndex].glow;
+        drawShip(210, 280, ships[shipIndex].color, 40);
+        ctx.shadowBlur = 0;
+        
+        // Navegación de naves
+        ctx.font = "bold 32px Orbitron";
+        ctx.fillStyle = "#00ffff";
+        ctx.fillText("◄", 55, 295);
+        ctx.fillText("►", 345, 295);
+        
+        // Botón Jugar
+        drawButton(100, 405, 220, 50, "¡ JUGAR !", "#00ff88", "#00ffaa", "#000");
+        // Modo online
+        drawButton(100, 470, 220, 50, "🌐 ONLINE", "#00aaff", "#00ffff", "#000");
+        ctx.font = "bold 11px Arial";
+        ctx.fillStyle = "#bffcff";
+        ctx.textAlign = "center";
+        ctx.fillText("MULTIJUGADOR", 210, 508);
+        ctx.textAlign = "left";
+        
+        // Tienda
+        ctx.fillStyle = "rgba(255, 100, 0, 0.8)";
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#ff6600";
+        ctx.beginPath();
+        ctx.arc(370, 580, 28, 0, Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        
+        ctx.fillStyle = "#000";
+        ctx.font = "28px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("🛒", 370, 590);
+        ctx.textAlign = "left";
+        
+        // Score
+        ctx.font = "bold 20px Orbitron";
+        drawGradientText("⭐ " + score, 15, 40, 20, "#ffff00", "#ff8800");
+        
+        requestAnimationFrame(loop); 
+        return;
+    }
+
+    if(state === "onlineLobby") {
+        requestAnimationFrame(loop);
+        return;
+    }
+
+    const onlineMode = state === "onlineGame";
+    if (onlineMode) {
+        sendOnlineState();
+        ctx.fillStyle = "#00ffff";
+        ctx.font = "bold 13px Arial";
+        ctx.fillText("🌐 ONLINE · SALA " + onlineRoom, 12, 22);
+        ctx.fillText("👥 " + Math.max(1, Object.keys(onlinePlayers).length) + " jugadores", 12, 42);
+    }
+
+    if(state === "shop") {
+        // Fondo tienda
+        let shopGradient = ctx.createLinearGradient(0, 0, 420, 650);
+        shopGradient.addColorStop(0, "rgba(255, 0, 100, 0.05)");
+        shopGradient.addColorStop(1, "rgba(100, 0, 255, 0.05)");
+        ctx.fillStyle = shopGradient;
+        ctx.fillRect(0, 0, 420, 650);
+        
+        ctx.font = "bold 40px Orbitron";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.fillText("⚙ TIENDA", 210, 70);
+        ctx.textAlign = "left";
+        
+        ctx.shadowBlur = 35;
+        ctx.shadowColor = ships[shipIndex].glow;
+        drawShip(210, 280, ships[shipIndex].color, 50);
+        ctx.shadowBlur = 0;
+        
+        ctx.font = "bold 24px Orbitron";
+        ctx.fillStyle = "#00ffff";
+        ctx.fillText("◄", 50, 295);
+        ctx.fillText("►", 345, 295);
+        
+        let s = ships[shipIndex];
+        if(save.owned[shipIndex]) { 
+            ctx.fillStyle = "#00ff88";
+            ctx.font = "bold 22px Orbitron";
+            ctx.textAlign = "center";
+            ctx.fillText("✓ ADQUIRIDA", 210, 420);
+            ctx.textAlign = "left";
+        } else { 
+            ctx.font = "bold 20px Orbitron";
+            ctx.fillStyle = "#ffff00";
+            ctx.textAlign = "center";
+            ctx.fillText("💰 " + s.price, 210, 410);
+            
+            let btnColor1 = score >= s.price ? "#ff6600" : "#444466";
+            let btnColor2 = score >= s.price ? "#ffaa00" : "#555577";
+            drawButton(80, 435, 260, 45, "COMPRAR", btnColor1, btnColor2, score >= s.price ? "#000" : "#888");
+            ctx.textAlign = "left";
+        }
+        
+        ctx.fillStyle = "#ff4444";
+        ctx.font = "bold 18px Orbitron";
+        ctx.textAlign = "center";
+        ctx.fillText("VOLVER", 210, 610);
+        ctx.textAlign = "left";
+        
+        requestAnimationFrame(loop); 
+        return;
+    }
+
+    if(state === "gameover") {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+        ctx.fillRect(0, 0, 420, 650);
+        
+        ctx.font = "bold 60px Orbitron";
+        ctx.textAlign = "center";
+        drawGradientText("GAME OVER", 210, 280, 60, "#ff0000", "#ff6600");
+        
+        ctx.font = "bold 20px Orbitron";
+        ctx.fillStyle = "#ffff00";
+        ctx.fillText("PUNTUACIÓN: " + score, 210, 380);
+        
+        ctx.fillStyle = "#00ffff";
+        ctx.fillText("CLIC PARA VOLVER", 210, 450);
+        ctx.textAlign = "left";
+        
+        requestAnimationFrame(loop); 
+        return;
+    }
+
+    // --- JUEGO NORMAL Y ONLINE ---
+    if (state !== "game" && state !== "onlineGame") {
+        requestAnimationFrame(loop);
+        return;
+    }
+
+    let currentSpeed = ships[shipIndex].speed + (speedTimer > 0 ? 4 : 0);
+    if((keys["ArrowLeft"] || keys["a"]) && player.x > 25) player.x -= currentSpeed;
+    if((keys["ArrowRight"] || keys["d"]) && player.x < 395) player.x += currentSpeed;
+    
+    if(shieldActive) { 
+        ctx.strokeStyle = "#00ffff";
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "#00ffff";
+        ctx.lineWidth = 3; 
+        ctx.beginPath(); 
+        ctx.arc(player.x, player.y+5, 40, 0, Math.PI*2); 
+        ctx.stroke(); 
+        ctx.shadowBlur = 0;
+        shieldTimer--; 
+        if(shieldTimer <= 0) shieldActive = false;
+    }
+    
+    if (onlineMode) drawOnlinePlayers();
+
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = ships[shipIndex].glow;
+    drawShip(player.x, player.y, ships[shipIndex].color, 20);
+    ctx.shadowBlur = 0;
+
+    // BARRAS DE TIEMPO INDEPENDIENTES
+    if(speedTimer > 0) {
+        let barGradient = ctx.createLinearGradient(player.x - 35, player.y + 30, player.x + 35, player.y + 30);
+        barGradient.addColorStop(0, "#0088ff");
+        barGradient.addColorStop(1, "#00ffff");
+        ctx.fillStyle = barGradient;
+        ctx.fillRect(player.x - 30, player.y + 30, (speedTimer/BONUS_DURATION)*60, 6);
+        ctx.strokeStyle = "#00ffff";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(player.x - 30, player.y + 30, 60, 6);
+        speedTimer--;
+    }
+    if(multiTimer > 0) {
+        let barGradient = ctx.createLinearGradient(player.x - 35, player.y + 40, player.x + 35, player.y + 40);
+        barGradient.addColorStop(0, "#ff0088");
+        barGradient.addColorStop(1, "#ff00ff");
+        ctx.fillStyle = barGradient;
+        ctx.fillRect(player.x - 30, player.y + 40, (multiTimer/BONUS_DURATION)*60, 6);
+        ctx.strokeStyle = "#ff00ff";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(player.x - 30, player.y + 40, 60, 6);
+        multiTimer--;
+    }
+
+    // Balas mejoradas
+    bullets.forEach((b, i) => { 
+        b.y -= 10; 
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ffff00";
+        ctx.fillStyle = "#ffff00"; 
+        ctx.fillRect(b.x-2, b.y, 4, 12);
+        ctx.shadowBlur = 0;
+        if(b.y < 0) bullets.splice(i, 1); 
+    });
+    
+    enemyTimer++; 
+    if(enemyTimer > 45) { 
+        enemies.push({x: Math.random()*380+20, y: -40}); 
+        enemyTimer = 0; 
+    }
+
+    enemies.forEach((e, i) => {
+        e.y += 1.6; 
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#ff0066";
+        drawShip(e.x, e.y, "#ff0066", 18, "down");
+        ctx.shadowBlur = 0;
+        
+        if(Math.hypot(e.x - player.x, e.y - player.y) < 30) { 
+            if(shieldActive) { 
+                explode(e.x, e.y); 
+                enemies.splice(i,1); 
+            } else { 
+                explode(player.x, player.y, true); 
+                state = "gameover"; 
+                saveGame(); 
+            } 
+        }
+        
+        bullets.forEach((b, j) => {
+            if(Math.hypot(e.x - b.x, e.y - b.y) < 20) { 
+                explode(e.x, e.y); 
+                enemies.splice(i,1); 
+                bullets.splice(j,1); 
+                score += 10; 
+                enemyKills++; 
+                if(enemyKills >= 12) shieldReady = true; 
+                if(Math.random() < 0.15) bonuses.push({x: e.x, y: e.y, type: Math.random() < 0.5 ? "speed" : "multi"});
+            }
+        });
+        if(e.y > 670) enemies.splice(i,1);
+    });
+
+    bonuses.forEach((bo, i) => {
+        bo.y += 2; 
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = bo.type === "speed" ? "#00ffff" : "#ff00ff";
+        ctx.fillStyle = bo.type === "speed" ? "#00ffff" : "#ff00ff"; 
+        ctx.fillRect(bo.x-12, bo.y-12, 24, 24);
+        
+        // Símbolo bonus
+        ctx.fillStyle = bo.type === "speed" ? "#000" : "#000";
+        ctx.font = "bold 16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(bo.type === "speed" ? "⚡" : "✕2", bo.x, bo.y+4);
+        ctx.textAlign = "left";
+        
+        ctx.shadowBlur = 0;
+        
+        if(Math.hypot(bo.x - player.x, bo.y - player.y) < 30) { 
+            if(bo.type === "speed") speedTimer = BONUS_DURATION; 
+            else multiTimer = BONUS_DURATION; 
+            bonuses.splice(i,1); 
+        }
+    });
+
+    particles.forEach((p, i) => { 
+        p.x += p.dx; 
+        p.y += p.dy; 
+        p.life--; 
+        ctx.fillStyle = p.c; 
+        ctx.globalAlpha = p.life/30; 
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.c;
+        ctx.fillRect(p.x, p.y, 4, 4); 
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1; 
+        if(p.life <= 0) particles.splice(i,1); 
+    });
+
+    // HUD
+    ctx.font = "bold 18px Orbitron";
+    drawGradientText("⊙ SCORE: " + score, 15, 25, 18, "#ffff00", "#ff8800");
+    
+    if(ships[shipIndex].color === "#ff00ff") { 
+        ctx.font = "bold 14px Orbitron";
+        ctx.fillStyle = shieldReady ? "#00ffff" : "#cccccc"; 
+        ctx.fillText(shieldReady ? "◆ ESCUDO LISTO (CTRL)" : "◇ CARGA: " + enemyKills + "/12", 15, 50); 
+    }
+
+    requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
